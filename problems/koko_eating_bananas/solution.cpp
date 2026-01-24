@@ -1,33 +1,39 @@
 class Solution {
 public:
-    long long required_hours(vector<int>& piles, int k) {
-        long long total_time = 0;
-        for (int i = 0; i < piles.size(); i++) {
-            total_time += (piles[i] + k - 1) / k;
+    int find_max(vector<int> &piles){
+        int maxi = INT_MIN;
+        for(int i = 0; i < piles.size(); i++){
+            maxi = max(maxi, piles[i]);
         }
-        return total_time;
+        return maxi;
     }
 
-    int find_minimum_banana_eating_speed(vector<int>& piles, int maxi, int h) {
-        int low = 1, high = maxi;
-        int ans = maxi;
+    long long calculate_hourly_speed(vector<int> &piles, int k){
+        long long total_hour = 0;
+        for(int i = 0; i < piles.size(); i++){
+            // promote to long long before arithmetic to avoid overflow
+            total_hour += ((long long)piles[i] + k - 1) / k;
+        }
+        return total_hour;
+    }
 
-        while (low <= high) {
+    int Binary_search(vector<int>& piles, int h){
+        int low = 1;
+        int high = find_max(piles);
+        while(low <= high){
             int mid = low + (high - low) / 2;
-            long long required_time = required_hours(piles, mid);
-
-            if (required_time <= h) {
-                ans = mid;
+            long long val = calculate_hourly_speed(piles, mid);
+            if(val <= h){
                 high = mid - 1;
             } else {
                 low = mid + 1;
             }
         }
-        return ans;
+        return low;
     }
 
-    int minEatingSpeed(vector<int>& piles, int h) {
-        int maxi = *max_element(piles.begin(), piles.end());
-        return find_minimum_banana_eating_speed(piles, maxi, h);
+    int minEatingSpeed(vector<int>& piles, int h){
+        return Binary_search(piles, h);
     }
 };
+
