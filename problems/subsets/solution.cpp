@@ -1,20 +1,22 @@
 class Solution {
 public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        int subsets= 1<<nums.size();
-        vector<vector<int>> answers;
-        for(int j=0;j<subsets;j++){
-            vector<int> vec;
-            for(int i=0;i<nums.size();i++){
-                if(j&(1<<i)){
-                    vec.push_back(nums[i]);
-                }
-            }
-            answers.push_back(vec);
-
+    vector<vector<int>> subsequences(vector<vector<int>> &vec,vector<int> &nums,int index, vector<int> &curr){
+        if(index>= nums.size()){
+            vec.push_back(curr);
+            return vec;
+            
         }
-        return answers;
-
+        curr.push_back(nums[index]);
+        subsequences(vec,nums,index+1,curr);
+        curr.pop_back();
+        subsequences(vec,nums,index+1,curr);
+        return vec;
+        
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> vec;
+        vector<int> curr;
+        return subsequences(vec,nums,0,curr);
         
     }
 };
