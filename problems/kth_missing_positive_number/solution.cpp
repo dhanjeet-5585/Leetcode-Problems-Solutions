@@ -1,25 +1,17 @@
 class Solution {
 public:
     int findKthPositive(vector<int>& arr, int k) {
-
-        map<int,int> all_int;
-
-        for(int i = 1; i <= 3000; i++){
-            all_int[i] = 0;
-        }
-
-        for(int i = 0; i < arr.size(); i++){
-            all_int[arr[i]]++;
-        }
-
-        vector<int> vec;
-
-        for(const auto& pair : all_int){
-            if(pair.second == 0){
-                vec.push_back(pair.first);
+        
+        int left=0;
+        int right= arr.size()-1;
+        while(left<=right){
+            int mid = (left+right)/2;
+            if(arr[mid]-(mid+1)<k){
+                left=mid+1;
+            }else{
+                right= mid-1;
             }
         }
-
-        return vec[k-1];
+        return left+k;
     }
 };
